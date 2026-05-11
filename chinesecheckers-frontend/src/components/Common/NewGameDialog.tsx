@@ -18,6 +18,7 @@ const PLAYER_COUNTS = [2, 3, 4, 6] as const;
 export default function NewGameDialog({ onStart }: NewGameDialogProps) {
   const [playerCount, setPlayerCount] = useState<number>(2);
   const [slots, setSlots] = useState<SlotConfig[]>(buildSlots(2));
+  const [showRules, setShowRules] = useState(false);
 
   function buildSlots(count: number): SlotConfig[] {
     const colors = VALID_CONFIGS[count];
@@ -58,6 +59,29 @@ export default function NewGameDialog({ onStart }: NewGameDialogProps) {
     <div className="new-game-overlay">
       <div className="new-game-dialog">
         <h2>Chinese Checkers</h2>
+
+        <button className="how-to-play-link" onClick={() => setShowRules(!showRules)}>
+          {showRules ? 'Hide Rules' : 'How to Play'}
+        </button>
+
+        {showRules && (
+          <div className="rules-panel">
+            <h3>Objective</h3>
+            <p>Move all 10 of your pieces from your home triangle to the opposite triangle before your opponents do.</p>
+            <h3>Movement</h3>
+            <ul>
+              <li><strong>Step:</strong> Move one space to any adjacent empty position.</li>
+              <li><strong>Hop:</strong> Jump over an adjacent piece (any color) to the empty space beyond it. The jumped piece stays on the board &mdash; there are no captures.</li>
+              <li><strong>Chain hops:</strong> After a hop you may keep hopping in any direction. You can stop at any point in the chain.</li>
+            </ul>
+            <h3>Key Rules</h3>
+            <ul>
+              <li>Jumping is <strong>never mandatory</strong> &mdash; you can always choose a simple step.</li>
+              <li>Once a piece enters its goal triangle, it <strong>cannot leave</strong>.</li>
+              <li>2, 3, 4, or 6 players. Each player can be human or AI.</li>
+            </ul>
+          </div>
+        )}
 
         <div className="player-count-selector">
           {PLAYER_COUNTS.map(count => (

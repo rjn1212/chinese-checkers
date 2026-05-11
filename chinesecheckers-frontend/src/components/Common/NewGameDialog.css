@@ -22,6 +22,56 @@
   text-align: center;
 }
 
+.how-to-play-link {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #64B5F6;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.how-to-play-link:hover {
+  color: #90CAF9;
+}
+
+.rules-panel {
+  background: #252525;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.rules-panel h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.rules-panel h3:not(:first-child) {
+  margin-top: 12px;
+}
+
+.rules-panel p {
+  margin: 0 0 4px;
+}
+
+.rules-panel ul {
+  margin: 0 0 4px;
+  padding-left: 20px;
+}
+
+.rules-panel li {
+  margin-bottom: 4px;
+}
+
 .player-count-selector {
   display: flex;
   gap: 8px;
