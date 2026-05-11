@@ -13,10 +13,12 @@ import java.util.UUID;
 public class GameService {
 
     private final GameRepository repository;
+    private final PlatformScoreReporter scoreReporter;
     private final GameEngine engine = new GameEngine();
 
-    public GameService(GameRepository repository) {
+    public GameService(GameRepository repository, PlatformScoreReporter scoreReporter) {
         this.repository = repository;
+        this.scoreReporter = scoreReporter;
     }
 
     public Game createGame(List<PlayerSlot> slots) {
@@ -79,6 +81,10 @@ public class GameService {
         if (game.getPhase() == GamePhase.PLAYING) {
             game.advanceTurn();
             aiMoves = playAiTurns(game);
+        }
+
+        if (game.getPhase() == GamePhase.GAME_OVER && game.getWinner() != null) {
+            scoreReporter.reportGameResult(game, game.getWinner());
         }
 
         return new MoveResult(humanColor, humanMove, aiMoves);
