@@ -21,6 +21,7 @@ export interface PlayerSlotData {
   difficulty: AiDifficulty | null;
   finished: boolean;
   finishOrder: number | null;
+  stalemated: boolean;
 }
 
 export interface MoveData {

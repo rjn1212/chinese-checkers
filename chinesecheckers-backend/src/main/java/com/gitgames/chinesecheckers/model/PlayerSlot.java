@@ -8,6 +8,8 @@ public class PlayerSlot {
     private boolean finished;
     private Integer finishOrder;
     private String platformUserId;
+    private int consecutiveSkippedTurns;
+    private boolean stalemated;
 
     public PlayerSlot(PlayerColor color, PlayerType type, AiDifficulty difficulty) {
         this.color = color;
@@ -51,6 +53,26 @@ public class PlayerSlot {
 
     public void setPlatformUserId(String platformUserId) {
         this.platformUserId = platformUserId;
+    }
+
+    public int getConsecutiveSkippedTurns() {
+        return consecutiveSkippedTurns;
+    }
+
+    public void incrementSkippedTurns() {
+        consecutiveSkippedTurns++;
+    }
+
+    public void resetSkippedTurns() {
+        consecutiveSkippedTurns = 0;
+    }
+
+    public boolean isStalemated() {
+        return stalemated;
+    }
+
+    public void setStalemated(boolean stalemated) {
+        this.stalemated = stalemated;
     }
 
     public boolean isHuman() {

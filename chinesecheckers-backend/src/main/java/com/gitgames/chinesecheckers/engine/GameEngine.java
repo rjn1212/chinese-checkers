@@ -42,6 +42,10 @@ public class GameEngine {
         return false;
     }
 
+    public boolean isPlayerStalemated(Board board, PlayerColor player) {
+        return moveValidator.getLegalMoves(board, player).isEmpty();
+    }
+
     public MoveValidator getMoveValidator() {
         return moveValidator;
     }

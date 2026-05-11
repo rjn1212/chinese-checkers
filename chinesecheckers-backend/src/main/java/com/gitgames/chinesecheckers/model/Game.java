@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Game {
 
+    public static final int STALEMATE_SKIP_THRESHOLD = 3;
+
     private final String id;
     private final Board board;
     private final List<PlayerSlot> playerSlots;
@@ -137,6 +139,14 @@ public class Game {
                 }
             }
         }
+    }
+
+    public void forfeitStalematedPlayer(PlayerColor color) {
+        PlayerSlot slot = getSlotForColor(color);
+        if (slot != null) {
+            slot.setStalemated(true);
+        }
+        markPlayerFinished(color);
     }
 
     public PlayerSlot getSlotForColor(PlayerColor color) {

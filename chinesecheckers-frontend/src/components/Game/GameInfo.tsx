@@ -30,8 +30,11 @@ export default function GameInfo({ playerSlots, currentTurn, phase, moveCount, w
               {slot.color}
               {slot.type === 'AI' && ` (${slot.difficulty})`}
             </span>
-            {slot.finished && slot.finishOrder && (
+            {slot.finished && slot.finishOrder && !slot.stalemated && (
               <span className="finish-badge">#{slot.finishOrder}</span>
+            )}
+            {slot.stalemated && (
+              <span className="stalemate-badge">Stalemated</span>
             )}
             {slot.color === currentTurn && phase === 'PLAYING' && slot.type === 'AI' && aiAnimating && (
               <span className="thinking">thinking...</span>
@@ -60,12 +63,16 @@ export default function GameInfo({ playerSlots, currentTurn, phase, moveCount, w
       {finishOrder.length > 0 && (
         <div className="rankings">
           <h4>Rankings</h4>
-          {finishOrder.map((color, i) => (
-            <div key={color} className="rank-item">
-              <span className="rank-number">#{i + 1}</span>
-              <span style={{ color: PLAYER_COLORS[color] }}>{color}</span>
-            </div>
-          ))}
+          {finishOrder.map((color, i) => {
+            const slot = playerSlots.find(s => s.color === color);
+            return (
+              <div key={color} className="rank-item">
+                <span className="rank-number">#{i + 1}</span>
+                <span style={{ color: PLAYER_COLORS[color] }}>{color}</span>
+                {slot?.stalemated && <span className="stalemate-note">(stalemated)</span>}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

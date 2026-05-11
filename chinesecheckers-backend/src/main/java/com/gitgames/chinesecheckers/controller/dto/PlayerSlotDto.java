@@ -10,10 +10,11 @@ public record PlayerSlotDto(
         PlayerType type,
         AiDifficulty difficulty,
         boolean finished,
-        Integer finishOrder
+        Integer finishOrder,
+        boolean stalemated
 ) {
     public static PlayerSlotDto from(PlayerSlot slot) {
         return new PlayerSlotDto(slot.getColor(), slot.getType(), slot.getDifficulty(),
-                slot.isFinished(), slot.getFinishOrder());
+                slot.isFinished(), slot.getFinishOrder(), slot.isStalemated());
     }
 }

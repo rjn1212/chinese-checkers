@@ -73,6 +73,8 @@ public class GameService {
         }
 
         PlayerColor humanColor = game.getCurrentTurn();
+        PlayerSlot humanSlot = game.getCurrentPlayerSlot();
+        humanSlot.resetSkippedTurns();
         engine.applyMove(game.getBoard(), humanMove);
         game.recordMove(humanColor, humanMove);
         engine.checkAndHandleWin(game, humanColor);
@@ -81,6 +83,7 @@ public class GameService {
         if (game.getPhase() == GamePhase.PLAYING) {
             game.advanceTurn();
             aiMoves = playAiTurns(game);
+            skipStalematedHumans(game, aiMoves);
         }
 
         if (game.getPhase() == GamePhase.GAME_OVER && game.getWinner() != null) {
@@ -103,10 +106,16 @@ public class GameService {
             Move move = strategy.selectMove(game.getBoard(), slot.getColor(), game.getPlayerSlots());
 
             if (move == null) {
+                slot.incrementSkippedTurns();
+                if (slot.getConsecutiveSkippedTurns() >= Game.STALEMATE_SKIP_THRESHOLD) {
+                    game.forfeitStalematedPlayer(slot.getColor());
+                    if (game.getPhase() != GamePhase.PLAYING) break;
+                }
                 game.advanceTurn();
                 continue;
             }
 
+            slot.resetSkippedTurns();
             engine.applyMove(game.getBoard(), move);
             game.recordMove(slot.getColor(), move);
             aiMoves.add(new AiMoveRecord(slot.getColor(), move));
@@ -118,6 +127,25 @@ public class GameService {
         }
 
         return aiMoves;
+    }
+
+    private void skipStalematedHumans(Game game, List<AiMoveRecord> aiMoves) {
+        while (game.getPhase() == GamePhase.PLAYING && game.isCurrentTurnHuman()) {
+            PlayerSlot slot = game.getCurrentPlayerSlot();
+            if (!engine.isPlayerStalemated(game.getBoard(), slot.getColor())) {
+                slot.resetSkippedTurns();
+                break;
+            }
+            slot.incrementSkippedTurns();
+            if (slot.getConsecutiveSkippedTurns() >= Game.STALEMATE_SKIP_THRESHOLD) {
+                game.forfeitStalematedPlayer(slot.getColor());
+                if (game.getPhase() != GamePhase.PLAYING) break;
+            }
+            game.advanceTurn();
+            if (game.isCurrentTurnAi()) {
+                aiMoves.addAll(playAiTurns(game));
+            }
+        }
     }
 
     public void abandonGame(String id) {
