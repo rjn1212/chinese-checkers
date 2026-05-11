@@ -28,9 +28,11 @@ public class PlatformAuthFilter implements Filter {
             try {
                 String token = authHeader.substring(7);
                 DecodedJWT jwt = JWT.require(Algorithm.HMAC256(jwtSecret))
+                        .withIssuer("game-platform")
                         .build()
                         .verify(token);
                 httpReq.setAttribute("platformUserId", jwt.getSubject());
+                httpReq.setAttribute("platformUsername", jwt.getClaim("username").asString());
                 httpReq.setAttribute("platformUserEmail", jwt.getClaim("email").asString());
                 httpReq.setAttribute("platformUserRole", jwt.getClaim("role").asString());
             } catch (Exception ignored) {

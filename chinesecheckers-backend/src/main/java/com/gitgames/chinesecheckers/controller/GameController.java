@@ -3,6 +3,7 @@ package com.gitgames.chinesecheckers.controller;
 import com.gitgames.chinesecheckers.controller.dto.*;
 import com.gitgames.chinesecheckers.model.*;
 import com.gitgames.chinesecheckers.service.GameService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,21 @@ public class GameController {
     }
 
     @PostMapping
-    public ResponseEntity<GameStateResponse> createGame(@RequestBody CreateGameRequest request) {
+    public ResponseEntity<GameStateResponse> createGame(
+            @RequestBody CreateGameRequest request,
+            HttpServletRequest httpRequest) {
+        String platformUserId = (String) httpRequest.getAttribute("platformUserId");
+
         List<PlayerSlot> slots = request.playerSlots().stream()
                 .map(s -> new PlayerSlot(s.color(), s.type(), s.difficulty()))
                 .toList();
+
+        if (platformUserId != null) {
+            slots.stream()
+                    .filter(PlayerSlot::isHuman)
+                    .findFirst()
+                    .ifPresent(slot -> slot.setPlatformUserId(platformUserId));
+        }
 
         Game game = gameService.createGame(slots);
 

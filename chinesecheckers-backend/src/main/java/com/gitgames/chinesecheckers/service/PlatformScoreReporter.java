@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 
 @Service
 public class PlatformScoreReporter {
@@ -25,25 +26,37 @@ public class PlatformScoreReporter {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
-    public void reportGameResult(Game game, PlayerColor winner) {
+    public void reportGameResult(Game game, PlayerColor winner, String userId, int score) {
         if (platformApiUrl == null || platformApiUrl.isBlank()) return;
         if (platformApiKey == null || platformApiKey.isBlank()) return;
+        if (userId == null || userId.isBlank()) return;
 
         try {
+            String result = score > 0 ? "WIN" : "LOSS";
             String body = """
                 {
                     "gameSlug": "chinese-checkers",
-                    "gameId": "%s",
-                    "winner": "%s",
-                    "moveCount": %d,
-                    "playerCount": %d
+                    "userId": "%s",
+                    "score": %d,
+                    "metadata": {
+                        "result": "%s",
+                        "gameId": "%s",
+                        "winner": "%s",
+                        "moveCount": %d,
+                        "playerCount": %d
+                    },
+                    "completedAt": "%s"
                 }
-                """.formatted(game.getId(), winner.name(), game.getMoveCount(), game.getPlayerSlots().size());
+                """.formatted(
+                    userId, score, result,
+                    game.getId(), winner.name(),
+                    game.getMoveCount(), game.getPlayerSlots().size(),
+                    Instant.now().toString());
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(platformApiUrl + "/api/scores"))
                     .header("Content-Type", "application/json")
-                    .header("X-API-Key", platformApiKey)
+                    .header("Authorization", "Bearer " + platformApiKey)
                     .POST(HttpRequest.BodyPublishers.ofString(body))
                     .build();
 

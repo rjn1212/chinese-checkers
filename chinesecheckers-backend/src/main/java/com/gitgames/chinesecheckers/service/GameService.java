@@ -84,7 +84,7 @@ public class GameService {
         }
 
         if (game.getPhase() == GamePhase.GAME_OVER && game.getWinner() != null) {
-            scoreReporter.reportGameResult(game, game.getWinner());
+            reportScores(game);
         }
 
         return new MoveResult(humanColor, humanMove, aiMoves);
@@ -123,6 +123,16 @@ public class GameService {
     public void abandonGame(String id) {
         getGame(id);
         repository.deleteById(id);
+    }
+
+    private void reportScores(Game game) {
+        PlayerColor winner = game.getWinner();
+        for (PlayerSlot slot : game.getPlayerSlots()) {
+            if (slot.isHuman() && slot.getPlatformUserId() != null) {
+                int score = slot.getColor() == winner ? 1 : 0;
+                scoreReporter.reportGameResult(game, winner, slot.getPlatformUserId(), score);
+            }
+        }
     }
 
     private AiStrategy createAiStrategy(AiDifficulty difficulty) {
