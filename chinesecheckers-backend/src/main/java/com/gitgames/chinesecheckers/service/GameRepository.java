@@ -1,0 +1,26 @@
+package com.gitgames.chinesecheckers.service;
+
+import com.gitgames.chinesecheckers.model.Game;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Repository
+public class GameRepository {
+
+    private final ConcurrentHashMap<String, Game> games = new ConcurrentHashMap<>();
+
+    public Game save(Game game) {
+        games.put(game.getId(), game);
+        return game;
+    }
+
+    public Optional<Game> findById(String id) {
+        return Optional.ofNullable(games.get(id));
+    }
+
+    public void deleteById(String id) {
+        games.remove(id);
+    }
+}

@@ -1,0 +1,30 @@
+.board-svg {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.piece-selected {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+}
+
+.piece-circle {
+  transition: cx 0.4s ease-in-out, cy 0.4s ease-in-out;
+}
+
+.touch-target {
+  fill: transparent;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  g:hover circle {
+    filter: brightness(1.1);
+  }
+}

@@ -1,0 +1,147 @@
+.game-info {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 200px;
+}
+
+.game-info h3, .game-info h4 {
+  margin: 0 0 12px 0;
+  color: #ccc;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.player-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.player-item.active-turn {
+  background: #333;
+  color: #fff;
+}
+
+.player-item.finished {
+  opacity: 0.6;
+}
+
+.player-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.player-name {
+  flex: 1;
+}
+
+.finish-badge {
+  background: #444;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.thinking {
+  color: #888;
+  font-style: italic;
+  font-size: 12px;
+}
+
+.game-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.winner-display {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  background: #333;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.rankings {
+  border-top: 1px solid #444;
+  padding-top: 12px;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.rank-number {
+  color: #888;
+  font-weight: bold;
+  width: 24px;
+}
+
+@media (max-width: 768px) {
+  .game-info {
+    padding: 12px;
+    min-width: unset;
+  }
+
+  .player-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .player-item {
+    padding: 4px 6px;
+    font-size: 13px;
+  }
+
+  .game-stats {
+    margin-bottom: 12px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+}
